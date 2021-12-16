@@ -1,4 +1,5 @@
 const express = require('express')
+const { Socket } = require('socket.io')
 const app = express()
 const http = require('http').createServer(app)
 
@@ -17,12 +18,23 @@ app.get('/', (req, res) => {
 // Socket 
 const io = require('socket.io')(http)
 
+
 io.on('connection', (socket) => {
     console.log('Connected...')
+ 
     console.log(socket.id);
     socket.on('message', (msg) => {
-        socket.broadcast.emit('message', msg)
+        socket.broadcast.to('1').emit('message', msg)
 
     })
 
 })
+/*
+io.on("connection", socket => {
+    console.log('Connected...')
+ 
+    console.log(socket.id);
+    socket.on("private message", (anotherSocketId, msg) => {
+      socket.to(anotherSocketId).emit("private message", socket.id, msg);
+    });
+  });*/
